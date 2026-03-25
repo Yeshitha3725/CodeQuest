@@ -1,0 +1,574 @@
+/* :root - CSS Variables 
+           We define colors here once so we can use them everywhere.
+           This allows us to change the entire theme dynamically in JavaScript.
+        */
+:root {
+    --bg-color: #E0F7FA;
+    /* The main background of the webpage */
+    --border-color: #4FC3F7;
+    /* The color of the device's outer frame */
+    --shadow-color: #0288D1;
+    /* The 3D shadow color below the device */
+    --inner-bg: #f0faff;
+    /* The background color of the screen/room */
+}
+
+body {
+    font-family: 'Comic Sans MS', cursive;
+    /* Fun font for a game feel */
+    background: var(--bg-color);
+    /* Usage of the CSS variable */
+    display: flex;
+    /* Flexbox makes centering easy */
+    flex-direction: column;
+    /* Stacks content vertically */
+    align-items: center;
+    /* Centers content horizontally */
+    padding: 10px;
+    transition: background 0.5s ease;
+    /* Smooth fade when theme changes */
+}
+
+/* The Main Game Device (looks like a phone or GameBoy) */
+#game-frame {
+    background: white;
+    border: 8px solid var(--border-color);
+    /* Thick colored border */
+    border-radius: 30px;
+    /* Rounded corners */
+    padding: 20px;
+    width: 380px;
+    /* Fixed width to simulate a mobile screen */
+    text-align: center;
+    box-shadow: 0 10px 0 var(--shadow-color);
+    /* Hard shadow for 3D pop */
+    position: relative;
+    /* Important: Overlays use absolute positioning relative to this */
+    min-height: 820px;
+    /* Ensures screen doesn't shrink when empty */
+    overflow: hidden;
+    /* Clips any content that slides outside */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: border-color 0.5s ease, box-shadow 0.5s ease;
+    /* Animation for theme switches */
+}
+
+/* Screen Management System */
+.screen {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    /* Takes up available vertical space */
+}
+
+/* .active: We toggle this class via JS to make a screen visible */
+.active {
+    display: flex;
+}
+
+/* General styling for Input fields */
+input {
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    font-size: 18px;
+    text-align: center;
+    width: 80%;
+    margin: 10px 0;
+}
+
+/* The "Room" where the pet sits */
+#pet-display-box {
+    background: var(--inner-bg);
+    border-radius: 20px;
+    margin: 10px 0;
+    padding: 20px;
+    border: 2px solid var(--border-color);
+    width: 90%;
+    position: relative;
+    /* Allows positioning of the Speech Bubble inside */
+    transition: background 0.5s ease, border-color 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* The Pet Emoji Character */
+#pet {
+    font-size: 80px;
+    margin: 10px;
+    transition: 0.3s;
+    animation: float 2s infinite ease-in-out;
+    /* Continuous floating animation */
+    cursor: pointer;
+    /* Indicates it's interactive */
+}
+
+/* Keyframes define the animation steps */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+    /* Move up 15px at halfway point */
+}
+
+/* SPEECH BUBBLE STYLING */
+#speech-bubble {
+    position: absolute;
+    /* Floating freely inside the pet box */
+    top: 15px;
+    right: 15px;
+    background: white;
+    border: 2px solid #333;
+    border-radius: 15px;
+    border-bottom-left-radius: 0;
+    /* Removing one corner makes the "tail" shape */
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Bouncy entrance */
+    max-width: 130px;
+    line-height: 1.3;
+    z-index: 5;
+    /* Sit on top of the pet */
+}
+
+/* Toast Notification (e.g. "Earned $5!" or "No money") */
+#toast {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Perfectly centers the element */
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 15px;
+    font-size: 16px;
+    z-index: 100;
+    /* Highest Z-index to cover everything */
+    display: none;
+    pointer-events: none;
+    /* Clicks pass through so it doesn't block buttons */
+    border: 2px solid #FFD700;
+}
+
+/* Menu Button Layouts */
+#button-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 15px 0;
+    width: 100%;
+}
+
+.square-btn {
+    border-radius: 15px;
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    border: 4px solid;
+}
+
+/* Specific Button Colors */
+#badge-btn {
+    background: #E1BEE7;
+    border-color: #BA68C8;
+    box-shadow: 0 5px 0 #8E24AA;
+    color: #4A148C;
+}
+
+#earn-btn {
+    background: #FFD54F;
+    border-color: #FBC02D;
+    box-shadow: 0 5px 0 #F9A825;
+    color: #5F4339;
+}
+
+#info-btn {
+    background: #B3E5FC;
+    border-color: #4FC3F7;
+    box-shadow: 0 5px 0 #0288D1;
+    color: #01579B;
+}
+
+#vet-btn {
+    background: #FFCDD2;
+    border-color: #E53935;
+    box-shadow: 0 5px 0 #B71C1C;
+    color: #B71C1C;
+}
+
+/* Urgent Animation: Used for flashing the Vet button when health is low */
+@keyframes urgent-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 5px 0 #B71C1C;
+        border-color: #E53935;
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px #D50000;
+        border-color: #D50000;
+        background: #ff8a80;
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 5px 0 #B71C1C;
+        border-color: #E53935;
+    }
+}
+
+.urgent {
+    animation: urgent-pulse 0.8s infinite;
+}
+
+/* Overlay System (Popups like Shop, Vet, etc.) */
+.overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 20;
+    border-radius: 22px;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Trophy Room Grid */
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Badge Item */
+.badge-item {
+    height: 70px;
+    background: #eee;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    border: 3px solid #ccc;
+    cursor: pointer;
+    filter: grayscale(1);
+    /* Makes it look locked/grey */
+    opacity: 0.4;
+    transition: 0.2s;
+}
+
+/* Unlocked Badge Style */
+.badge-item.unlocked {
+    background: #FFF9C4;
+    border-color: #FBC02D;
+    filter: grayscale(0);
+    opacity: 1;
+}
+
+#badge-info {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    font-size: 12px;
+    width: 90%;
+    min-height: 40px;
+}
+
+/* Stat Bars (Health, Hunger, etc.) */
+.stat-container {
+    margin: 6px 0;
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+    width: 90%;
+}
+
+.stat-bar {
+    background: #eee;
+    border-radius: 5px;
+    height: 12px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    position: relative;
+}
+
+.fill {
+    height: 100%;
+    transition: 0.5s;
+    width: 100%;
+}
+
+/* Transition creates the sliding bar effect */
+
+/* Action Menus (Grid of 4 buttons) */
+.grid-menu {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 15px;
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 20px;
+    border: 2px dashed #ccc;
+    width: 90%;
+}
+
+.main-btn {
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    width: 100%;
+    margin: 5px 0;
+}
+
+/* LOG SHEET STYLES */
+.log-container {
+    margin-top: 15px;
+    background: white;
+    border: 3px solid #0288D1;
+    /* Thicker blue border */
+    border-radius: 12px;
+    padding: 15px;
+    width: 95%;
+    /* Wider width */
+    height: 300px;
+    /* Taller height */
+    overflow-y: auto;
+    /* Adds vertical scrollbar if list gets too long */
+    text-align: left;
+    font-size: 15px;
+    /* Larger Text */
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.log-entry {
+    border-bottom: 2px solid #f0f0f0;
+    padding: 8px 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.log-earn {
+    color: #2ecc71;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.log-spend {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Minigame/Extra CSS */
+#vet-layout {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#vet-tasks {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+#vet-pet-view {
+    width: 50%;
+    font-size: 80px;
+}
+
+.vet-tool {
+    font-size: 40px;
+    cursor: pointer;
+    user-select: none;
+}
+
+#shot-progress-bg {
+    width: 80px;
+    height: 10px;
+    background: #ddd;
+    border-radius: 5px;
+    display: none;
+}
+
+#shot-progress-fill {
+    height: 100%;
+    background: #4FC3F7;
+    width: 0%;
+}
+
+.math-choice-btn {
+    background: #f0f0f0;
+    border: 2px solid #ccc;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.memory-btn {
+    width: 90px;
+    height: 90px;
+    border-radius: 15px;
+    border: 4px solid #333;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.1s;
+}
+
+.memory-btn.active-light {
+    opacity: 1;
+    transform: scale(1.1);
+    box-shadow: 0 0 20px white;
+}
+
+.info-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.info-tab {
+    padding: 8px;
+    background: #B3E5FC;
+    border: 2px solid #4FC3F7;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    flex-shrink: 0;
+    transition: 0.2s;
+}
+
+.info-tab.active-tab {
+    background: #0288D1;
+    border-color: #01579B;
+    color: white;
+    transform: scale(1.1);
+}
+
+.info-section {
+    background: #E1F5FE;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-left: 5px solid #0288D1;
+    text-align: left;
+    width: 90%;
+}
+
+.color-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.color-dot.selected {
+    border-color: #333;
+}
+
+#tutorial-overlay,
+#welcome-page-overlay {
+    background: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+}
+
+.tutorial-box {
+    background: white;
+    width: 85%;
+    max-width: 320px;
+    padding: 20px;
+    border-radius: 20px;
+    border: 4px solid var(--border-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: center;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.close-x {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+    font-weight: bold;
+}
+
+.tutorial-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    text-align: left;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.step-icon {
+    font-size: 20px;
+    background: var(--inner-bg);
+    padding: 5px;
+    border-radius: 8px;
+}

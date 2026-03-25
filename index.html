@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Buddy Care Ultra</title>
+    <!--Link to css styling-->
+    <link rel="stylesheet" href="style.css">
+
+
+
+</head>
+
+<body>
+
+    <div id="game-frame">
+        <div id="toast">Earned $5!</div>
+
+        <!--Welcome page overlay-->
+        <div id="welcome-page-overlay" class="overlay" style="display: flex;">
+            <div class="tutorial-box">
+                <h1 style="color:#0277BD; font-size: 32px; margin-bottom: 10px;">Welcome to<br>Buddy Care Ultra!</h1>
+                <p style="color: #455A64; font-size: 14px;">Start your journey to become the ultimate pet caretaker
+                    today!</p>
+                <button class="main-btn" style="background:#0288D1; margin-top: 20px;"
+                    onclick="closeOverlay('welcome-page-overlay')">Start Game ▶</button>
+            </div>
+        </div>
+
+        <!--Game Over page overlay-->
+        <div id="game-over-overlay" class="overlay"
+            style="background: rgba(0,0,0,0.95); justify-content: center; color: white; border: 4px solid #FF5252;">
+            <h1 style="color: #FF5252; font-size: 40px; margin: 0;">GAME OVER</h1>
+            <div style="font-size: 80px; margin: 20px;">👻</div>
+            <p style="font-size: 16px; margin-bottom: 20px;">Your pet ran away to find a better home...</p>
+            <button class="main-btn" style="background: #FF5252; width: 60%;" onclick="location.reload()">Restart Game
+                ↺</button>
+        </div>
+
+        <!--Starting page overlay-->
+        <div id="custom-screen" class="screen active">
+            <h2 style="color:#0277BD; margin-top: 10px;">Setup Game</h2>
+            <hr style="width: 80%; border: 1px dashed #B3E5FC; margin: 10px 0 20px 0;">
+            <h3 style="color:#0277BD; margin:0;">1. Customize Room</h3>
+            <p style="margin-top: 5px;">Pick a Room Color:</p>
+
+            <!--Choices for background colors-->
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <div class="color-dot" style="background: #F8BBD0;"
+                    onclick="setTheme('#F8BBD0', '#F06292', '#C2185B', this)"></div>
+                <div class="color-dot" style="background: #ed9e3e;"
+                    onclick="setTheme('#ed9e3e', '#cf770c', '#ba6b0b', this)"></div>
+                <div class="color-dot" style="background: #FFF9C4;"
+                    onclick="setTheme('#FFF9C4', '#FBC02D', '#F9A825', this)"></div>
+                <div class="color-dot" style="background: #C8E6C9;"
+                    onclick="setTheme('#C8E6C9', '#66BB6A', '#388E3C', this)"></div>
+                <div class="color-dot" style="background: #f0faff;"
+                    onclick="setTheme('#f0faff', '#4FC3F7', '#0288D1', this)"></div>
+                <div class="color-dot" style="background: #cbc8e6;"
+                    onclick="setTheme('#cbc8e6', '#5d4fe0', '#382abd', this)"></div>
+            </div>
+            <!--How to play and next button-->
+            <button class="main-btn" style="background:#0288D1; margin-top: 10px; width: 80%;"
+                onclick="showScreen('type-screen')">Next: Choose Pet</button>
+            <button class="main-btn" style="background:#9C27B0; width: 80%;"
+                onclick="showOverlay('tutorial-overlay')">How To Play 📖</button>
+        </div>
+
+
+        <!--Adoption Center-->
+        <div id="type-screen" class="screen">
+            <h1 style="color:#0277BD; font-size: 32px;">Pick a Friend!</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 95%;">
+                <button class="main-btn" style="background:#4FC3F7; height: 80px;" onclick="selectType('🐶', 'Dog')">🐶
+                    Dog</button>
+                <button class="main-btn" style="background:#4FC3F7; height: 80px;" onclick="selectType('🐱', 'Cat')">🐱
+                    Cat</button>
+                <button class="main-btn" style="background:#4FC3F7; height: 80px;"
+                    onclick="selectType('🐰', 'Bunny')">🐰 Bunny</button>
+                <button class="main-btn" style="background:#4FC3F7; height: 80px;"
+                    onclick="selectType('🦜', 'Parrot')">🦜 Parrot</button>
+                <button class="main-btn" style="background:#4FC3F7; height: 80px;" onclick="selectType('🐸', 'Frog')">🐸
+                    Frog</button>
+                <button class="main-btn" style="background:#4FC3F7; height: 80px;"
+                    onclick="selectType('🐹', 'Hamster')">🐹 Hamster</button>
+            </div>
+            <button class="main-btn" style="background:#9E9E9E;" onclick="showScreen('custom-screen')">⬅ Back</button>
+        </div>
+
+
+        <!--Where user names their pet-->
+        <div id="name-screen" class="screen">
+            <h2 style="color:#0277BD;">Name your <span id="chosen-type-label">Pet</span></h2>
+            <div id="preview-emoji" style="font-size: 100px;">🐶</div>
+            <input type="text" id="name-input" placeholder="Enter Name..." maxlength="12">
+            <button class="main-btn" style="background:#0288D1; width: 80%;" onclick="finalizeName()">Adopt
+                Pet!</button>
+            <button class="main-btn" style="background:#9E9E9E;" onclick="showScreen('type-screen')">⬅ Back</button>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <h2 id="display-name">Pet</h2>
+
+            <!--Displays speech bubble for pet-->
+            <div id="pet-display-box">
+                <div id="speech-bubble">Hi!</div>
+                <div id="pet">🐶</div>
+            </div>
+
+            <!--Additional care -->
+            <div id="button-row">
+                <button id="badge-btn" class="square-btn"
+                    onclick="showOverlay('badge-overlay')"><span>BADGES</span><br>🏆</button>
+                <button id="earn-btn" class="square-btn" onclick="showOverlay('job-menu')"><span>MONEY</span><br>BOOTH
+                    💰</button>
+                <button id="vet-btn" class="square-btn" onclick="openVet()"><span>VET</span><br>🏥</button>
+                <button id="info-btn" class="square-btn" onclick="openHandbook()"><span>INFO</span><br>📖</button>
+            </div>
+
+            <!--Pet health bars-->
+            <div class="stat-container">Health ❤️ (<span id="health-pct">100</span>%) <div class="stat-bar">
+                    <div id="health-fill" class="fill" style="background:#FF5252;"></div>
+                </div>
+            </div>
+            <div class="stat-container">Hunger 🍔 (<span id="hunger-pct">100</span>%) <div class="stat-bar">
+                    <div id="hunger-fill" class="fill" style="background:#FF9800;"></div>
+                </div>
+            </div>
+            <div class="stat-container">Energy ⚡ (<span id="energy-pct">100</span>%) <div class="stat-bar">
+                    <div id="energy-fill" class="fill" style="background:#2979FF;"></div>
+                </div>
+            </div>
+            <div class="stat-container">Happy 😊 (<span id="happy-pct">100</span>%) <div class="stat-bar">
+                    <div id="happy-fill" class="fill" style="background:#FFD700;"></div>
+                </div>
+            </div>
+
+            <div style="font-size:22px; font-weight:bold; margin:10px;">💰 $<span id="balance">50.00</span></div>
+
+            <!--Additional pet care buttons-->
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; width:90%;">
+                <button class="main-btn" style="background:#4CAF50" onclick="showMenu('feed-menu')">🍎 Feed</button>
+                <button class="main-btn" style="background:#2196F3" onclick="showMenu('play-menu')">🧸 Play</button>
+                <button class="main-btn" style="background:#00BCD4" onclick="showMenu('clean-menu')">🧼 Clean</button>
+                <button class="main-btn" style="background:#FF9800" onclick="showMenu('rest-menu')">😴 Rest</button>
+            </div>
+
+            <!--Health bar buttons-->
+            <div id="feed-menu" class="grid-menu"></div>
+            <div id="play-menu" class="grid-menu"></div>
+            <div id="clean-menu" class="grid-menu"></div>
+            <div id="rest-menu" class="grid-menu"></div>
+        </div>
+
+
+        <!--Additional care buttons-->
+        <div id="tutorial-overlay" class="overlay">
+            <div class="tutorial-box">
+                <div class="close-x" onclick="closeOverlay('tutorial-overlay')">×</div>
+                <h2 style="color:#0277BD; margin-top: 0;">How to Play 🐾</h2>
+                <div class="tutorial-step"><span class="step-icon">❤️</span><span>Keep your pet healthy! Feed and play
+                        with them to keep the bars full.</span></div>
+                <div class="tutorial-step"><span class="step-icon">💰</span><span>Earn money at the <b>Money Booth</b>
+                        by playing Math or Memory games.</span></div>
+                <div class="tutorial-step"><span class="step-icon">🧠</span><span>In <b>Memory Tiles</b>, repeat the
+                        pattern after it flashes. Don't rush!</span></div>
+                <div class="tutorial-step"><span class="step-icon">🏆</span><span>Complete challenges to unlock all 15
+                        badges in your Trophy Room.</span></div>
+                <button class="main-btn" style="background:#0288D1; margin-top: 10px;"
+                    onclick="closeOverlay('tutorial-overlay')">Got it!</button>
+            </div>
+        </div>
+
+        <!--Info page-->
+        <div id="info-overlay" class="overlay">
+            <h2 style="color:#0277BD;">Pet Handbook 📖</h2>
+            <div class="info-tabs">
+                <!--Information tab on each pet-->
+                <div class="info-tab" id="tab-Dog" onclick="updateHandbook('Dog')">🐶</div>
+                <div class="info-tab" id="tab-Cat" onclick="updateHandbook('Cat')">🐱</div>
+                <div class="info-tab" id="tab-Bunny" onclick="updateHandbook('Bunny')">🐰</div>
+                <div class="info-tab" id="tab-Parrot" onclick="updateHandbook('Parrot')">🦜</div>
+                <div class="info-tab" id="tab-Frog" onclick="updateHandbook('Frog')">🐸</div>
+                <div class="info-tab" id="tab-Hamster" onclick="updateHandbook('Hamster')">🐹</div>
+            </div>
+            <!--Facts and costs about pets-->
+            <div class="info-section"><strong>🏠 Cost:</strong> <span id="info-cost"></span></div>
+            <div class="info-section"><strong>💸 Food/Groom:</strong> <span id="info-food"></span> / <span
+                    id="info-groom"></span></div>
+            <div class="info-section"><strong>💡 Fact:</strong> <br><span id="info-fact"></span></div>
+
+            <!--Money logs-->
+            <h3 style="color:#0277BD; margin-bottom: 5px;">Money Log 📜</h3>
+            <div id="transaction-list" class="log-container">
+                <div style="text-align:center; color:#888; margin-top:10px;">No history yet...</div>
+            </div>
+
+            <button class="main-btn" style="background:#0288D1; margin-top: 10px;"
+                onclick="closeOverlay('info-overlay')">Close Handbook</button>
+            <button class="main-btn" style="background:#E53935;" onclick="resetGame()">Reset Progress</button>
+        </div>
+
+        <!--Vet features-->
+        <div id="vet-overlay" class="overlay">
+            <h2>Vet Clinic</h2>
+            <div id="vet-layout">
+                <div id="vet-tasks">
+                    <!--Heart tapoing 5x-->
+                    <div onclick="tapHeart()" class="vet-tool">❤️</div>
+                    <div id="vet-heart-text" style="font-size:12px;">Tap 5x (0/5)</div>
+                    <!--Holding shot for 2 seconds-->
+                    <div onmousedown="startShot()" onmouseup="stopShot()" class="vet-tool">💉</div>
+                    <div id="shot-progress-bg">
+                        <div id="shot-progress-fill"></div>
+                    </div>
+                </div>
+                <div id="vet-pet-view">🐶</div>
+            </div>
+            <button class="main-btn" style="background:#ccc; color: black;"
+                onclick="closeOverlay('vet-overlay')">Cancel</button>
+        </div>
+
+        <!--Trophy Room-->
+        <div id="badge-overlay" class="overlay">
+            <h2>Trophy Room</h2>
+            <div class="badge-grid" id="badge-list"></div>
+            <div id="badge-info">Click a trophy!</div>
+            <button class="main-btn" style="background:#ccc; color: black;"
+                onclick="closeOverlay('badge-overlay')">Close</button>
+        </div>
+
+        <!--Money Booth-->
+        <div id="job-menu" class="overlay">
+            <h2>Money Booth</h2>
+            <button class="main-btn" style="background:#4CAF50;" onclick="showOverlay('math-config-overlay')">Math Lab
+                ($25)</button>
+            <button class="main-btn" style="background:#9C27B0;" onclick="startMemoryGame()">Memory Tiles ($15)</button>
+            <button class="main-btn" style="background:#ccc; color: black;"
+                onclick="closeOverlay('job-menu')">Close</button>
+        </div>
+
+        <!--Mathmatical operations for math lab-->
+        <div id="math-config-overlay" class="overlay">
+            <h2>Choose Math</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 90%;">
+                <button class="main-btn" style="background:#81c784;" onclick="startMathJob('+')">Add (+)</button>
+                <button class="main-btn" style="background:#FFB74D;" onclick="startMathJob('-')">Sub (-)</button>
+                <button class="main-btn" style="background:#64B5F6;" onclick="startMathJob('*')">Mult (×)</button>
+                <button class="main-btn" style="background:#E57373;" onclick="startMathJob('/')">Div (÷)</button>
+            </div>
+            <button class="main-btn" style="background:#ccc; color: black; margin-top: 15px;"
+                onclick="closeOverlay('math-config-overlay'); showOverlay('job-menu')">Back</button>
+        </div>
+
+        <div id="math-overlay" class="overlay">
+            <h2 id="math-header">Math Lab</h2>
+            <div id="math-display" style="font-size:40px; margin:20px; font-weight:bold;"></div>
+            <div id="math-options" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%;"></div>
+            <button class="main-btn" style="background:#ccc; color: black; margin-top: 20px;"
+                onclick="closeOverlay('math-overlay')">Quit</button>
+        </div>
+
+        <!--Memory tiles-->
+        <div id="memory-overlay" class="overlay">
+            <h2>Memory Tiles</h2>
+            <div id="mem-status">Watch!</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                <div class="memory-btn" id="mem-0" style="background:#f44336;" onclick="userMemoryClick(0)"></div>
+                <div class="memory-btn" id="mem-1" style="background:#2196F3;" onclick="userMemoryClick(1)"></div>
+                <div class="memory-btn" id="mem-2" style="background:#4CAF50;" onclick="userMemoryClick(2)"></div>
+                <div class="memory-btn" id="mem-3" style="background:#FFEB3B;" onclick="userMemoryClick(3)"></div>
+            </div>
+            <button class="main-btn" style="background:#ccc; color: black; margin-top: 20px;"
+                onclick="closeOverlay('memory-overlay')">Quit</button>
+        </div>
+    </div>
+
+    <script>
+
+        // --- GLOBAL VARIABLES ---
+        let health = 100, hunger = 100, energy = 100, happiness = 100, balance = 50.00;
+        let gameRunning = false;
+        let chosenEmoji = "🐶", chosenTypeName = "Dog";
+        let transactionLog = [];
+        let heartTaps = 0, shotProgress = 0, shotTimer, shotDone = false;
+        let mathOp, mathAns, mathCount, memSeq = [], userSeq = [], isWatching = false;
+
+        // --- ITEM DATABASE (Standard Items Only) ---
+        const allItems = [
+            // FEED
+            { id: 'apple', type: 'feed', name: '🍎 Apple', cost: 5, effects: { h: 20, e: 0, hap: 5, hMod: 2 } },
+            { id: 'pizza', type: 'feed', name: '🍕 Pizza', cost: 12, effects: { h: 40, e: -5, hap: 10, hMod: -10 } },
+            { id: 'salad', type: 'feed', name: '🥗 Salad', cost: 8, effects: { h: 40, e: -5, hap: 10, hMod: 5 } },
+            { id: 'cake', type: 'feed', name: '🎂 Cake', cost: 10, effects: { h: 20, e: -10, hap: 20, hMod: -20 } },
+
+            // PLAY
+            { id: 'ball', type: 'play', name: '🥎 Ball', cost: 5, effects: { h: -5, e: -20, hap: 45, hMod: 0 } },
+            { id: 'bone', type: 'play', name: '🦴 Bone', cost: 8, effects: { h: -5, e: -20, hap: 45, hMod: 0 } },
+            { id: 'frisbee', type: 'play', name: '🥏️ Frisbee', cost: 10, effects: { h: -5, e: -20, hap: 45, hMod: 0 } },
+            { id: 'park', type: 'play', name: '🏞️ Park', cost: 20, effects: { h: -5, e: -20, hap: 45, hMod: 0 } },
+
+            // CLEAN
+            { id: 'wash', type: 'clean', name: '🚿 Wash', cost: 5, effects: { h: 0, e: -5, hap: 5, hMod: 15 } },
+            { id: 'brush', type: 'clean', name: '🪮 Brush', cost: 8, effects: { h: 0, e: -5, hap: 5, hMod: 15 } },
+            { id: 'bubble', type: 'clean', name: '🛀 Bubble', cost: 13, effects: { h: 0, e: -5, hap: 5, hMod: 15 } },
+            { id: 'groom', type: 'clean', name: '✂️ Groom', cost: 20, effects: { h: 0, e: -5, hap: 5, hMod: 15 } },
+
+            // REST
+            { id: 'nap', type: 'rest', name: '💤 Nap', cost: 0, effects: { h: -10, e: 20, hap: 5, hMod: 5 } },
+            { id: 'couch', type: 'rest', name: '🛋️ Couch', cost: 0, effects: { h: -5, e: 10, hap: 5, hMod: 0 } },
+            { id: 'car', type: 'rest', name: '🚗 Car', cost: 10, effects: { h: -5, e: 40, hap: 5, hMod: 5 } },
+            { id: 'hotel', type: 'rest', name: '🏩 Hotel', cost: 30, effects: { h: -5, e: 100, hap: 5, hMod: 5 } }
+        ];
+
+        //Hand book array
+        const handbookData = {
+            'Dog': { cost: '$50+', food: '$40', grooming: '$50', fact: 'Dogs miss you when you are gone!' },
+            'Cat': { cost: '$50+', food: '$30', grooming: '$30', fact: 'Cats sleep 70% of their lives!' },
+            'Bunny': { cost: '$20+', food: '$20', grooming: '$20', fact: 'Bunny teeth never stop growing!' },
+            'Parrot': { cost: '$20+', food: '$20', grooming: '$10', fact: 'Parrots can live over 80 years!' },
+            'Frog': { cost: '$5+', food: '$10', grooming: '$0', fact: 'Frogs drink through their skin!' },
+            'Hamster': { cost: '$5+', food: '$10', grooming: '$0', fact: 'Hamsters have cheek food pouches!' }
+        };
+
+        //Badges
+        const badges = [
+            { id: 'adopt', icon: '🐣', title: 'Adopted!', desc: 'Welcomed a friend!', unlocked: false },
+            { id: 'rich', icon: '💰', title: 'Wealthy', desc: 'Reach $200!', unlocked: false },
+            { id: 'math', icon: '🧠', title: 'Scholar', desc: 'Finish 5 Math sessions!', unlocked: false, count: 0 },
+            { id: 'vet', icon: '🩹', title: 'Healer', desc: 'Visit the Vet!', unlocked: false },
+            { id: 'full', icon: '🍗', title: 'Stuffed', desc: 'Get Hunger to 100%!', unlocked: false },
+            { id: 'happy', icon: '⭐', title: 'Joyful', desc: 'Get Happiness to 100%!', unlocked: false },
+            { id: 'clean', icon: '✨', title: 'Squeaky', desc: 'Clean pet 10 times!', unlocked: false, count: 0 },
+            { id: 'rest', icon: '🛌', title: 'Sleepy', desc: 'Take 10 naps!', unlocked: false, count: 0 },
+            { id: 'memory', icon: '🎴', title: 'Tactician', desc: 'Beat Memory 3 times!', unlocked: false, count: 0 },
+            { id: 'broke', icon: '💸', title: 'Spender', desc: 'Less than $5 left!', unlocked: false },
+            { id: 'play', icon: '🎾', title: 'Athlete', desc: 'Play 15 times!', unlocked: false, count: 0 },
+            { id: 'burger', icon: '🍕', title: 'Pizza', desc: 'Buy 5 Pizzas!', unlocked: false, count: 0 },
+            { id: 'survivor', icon: '🔥', title: 'Survivor', desc: 'Alive for 5 mins!', unlocked: false },
+            { id: 'vet_pro', icon: '🏥', title: 'Vet Regular', desc: 'Visit Vet 5 times!', unlocked: false, count: 0 },
+            { id: 'millionaire', icon: '💎', title: 'Diamond', desc: 'Reach $500!', unlocked: false }
+        ];
+
+        // --- DISPLAY FUNCTIONS ---
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function showOverlay(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeOverlay(id) { document.getElementById(id).style.display = 'none'; }
+
+        function showMenu(id) {
+            let menu = document.getElementById(id);
+            let isOpen = menu.style.display === 'grid';
+            document.querySelectorAll('.grid-menu').forEach(m => m.style.display = 'none');
+            menu.style.display = isOpen ? 'none' : 'grid';
+        }
+
+        function setTheme(inner, border, shadow, el) {
+            const root = document.documentElement;
+            root.style.setProperty('--inner-bg', inner);
+            root.style.setProperty('--border-color', border);
+            root.style.setProperty('--shadow-color', shadow);
+            root.style.setProperty('--bg-color', inner);
+            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // --- SETUP LOGIC ---
+        function selectType(emoji, type) {
+            chosenEmoji = emoji;
+            chosenTypeName = type;
+            document.getElementById('chosen-type-label').innerText = type;
+            document.getElementById('preview-emoji').innerText = emoji;
+            showScreen('name-screen');
+        }
+
+        function finalizeName() {
+            let val = document.getElementById('name-input').value;
+            if (!val) return;
+
+            document.getElementById('display-name').innerText = val;
+            document.getElementById('pet').innerText = chosenEmoji;
+            document.getElementById('vet-pet-view').innerText = chosenEmoji;
+
+            showScreen('game-screen');
+            gameRunning = true;
+            unlockBadge('adopt');
+            renderBadges();
+            generateMenuButtons(); // Render buttons based on standard items
+            logTransaction("Allowance", 50);
+
+            setInterval(tick, 3000);
+            setTimeout(() => unlockBadge('survivor'), 300000);
+        }
+
+        // --- DYNAMIC MENUS ---
+        function generateMenuButtons() {
+            // Clear existing
+            document.getElementById('feed-menu').innerHTML = '';
+            document.getElementById('play-menu').innerHTML = '';
+            document.getElementById('clean-menu').innerHTML = '';
+            document.getElementById('rest-menu').innerHTML = '';
+
+            // Create buttons for all items (Everything is unlocked)
+            allItems.forEach(item => {
+                let btn = document.createElement('button');
+                btn.className = 'main-btn';
+                // Button Color based on type
+                if (item.type === 'feed') btn.style.background = (item.id === 'pizza' || item.id === 'cake') ? '#f1c40f' : '#2ecc71';
+                else if (item.type === 'play') btn.style.background = '#3498db';
+                else if (item.type === 'clean') btn.style.background = '#00BCD4';
+                else btn.style.background = '#FF9800';
+
+                btn.innerText = `${item.name} ${item.cost > 0 ? '$' + item.cost : 'Free'}`;
+                btn.style.fontSize = "11px";
+                btn.onclick = () => applyAction(item.cost, item.effects.h, item.effects.e, item.effects.hap, item.effects.hMod, item.name);
+
+                document.getElementById(item.type + '-menu').appendChild(btn);
+            });
+        }
+
+        // --- CORE GAME LOGIC ---
+        function applyAction(cost, h, e, hap, hMod, itemName) {
+            if (!gameRunning) return;
+            if (balance < cost) { showToast("No Money!"); return; }
+
+            balance -= cost;
+            if (cost > 0 && itemName) logTransaction(itemName, -cost);
+
+            hunger = Math.max(0, Math.min(100, hunger + h));
+            energy = Math.max(0, Math.min(100, energy + e));
+            happiness = Math.max(0, Math.min(100, happiness + hap));
+            health = Math.max(0, Math.min(100, health + hMod));
+
+            if (hunger >= 100) unlockBadge('full');
+            if (happiness >= 100) unlockBadge('happy');
+            if (hap > 0) incrementBadge('play', 15);
+            if (hMod > 0 && h === 0) incrementBadge('clean', 10);
+            if (e > 2) incrementBadge('rest', 10);
+            if (cost === 12) incrementBadge('burger', 5);
+
+            updateUI();
+            updatePetSpeech();
+        }
+
+        function tick() {
+            if (!gameRunning) return;
+
+            hunger = Math.max(0, hunger - 2); //Decrease hunger by 2 every 3 seconds
+            energy = Math.max(0, energy - 1); //Decrease energy by 1 every 3 seconds
+            happiness = Math.max(0, happiness - 2); //Decrease happiness by 2 every 3 seconds
+            health = Math.max(0, health - 1); //Decrease health by 1 every 3 seconds
+
+            //Check health status about 0
+            if (health <= 0 && hunger <= 0 && energy <= 0 && happiness <= 0) {
+                gameRunning = false;
+                showOverlay('game-over-overlay');
+                return;
+            }
+
+            if (balance >= 200) unlockBadge('rich');
+            if (balance >= 500) unlockBadge('millionaire');
+            if (balance < 5) unlockBadge('broke');
+
+            updateUI();
+            updatePetSpeech();
+        }
+
+        function updateUI() {
+            document.getElementById('health-pct').innerText = health;
+            document.getElementById('hunger-pct').innerText = hunger;
+            document.getElementById('energy-pct').innerText = energy;
+            document.getElementById('happy-pct').innerText = happiness;
+            document.getElementById('balance').innerText = balance.toFixed(2);
+
+            document.getElementById('health-fill').style.width = health + "%";
+            document.getElementById('hunger-fill').style.width = hunger + "%";
+            document.getElementById('energy-fill').style.width = energy + "%";
+            document.getElementById('happy-fill').style.width = happiness + "%";
+
+            let vetBtn = document.getElementById('vet-btn');
+            if (health < 50) vetBtn.classList.add('urgent');
+            else vetBtn.classList.remove('urgent');
+        }
+
+        //Pet speech bubble
+        function updatePetSpeech() {
+            let msg = "";
+            if (health < 40) {
+                const msgs = ["I feel sick... 🤢", "Ouchie...", "Need a vet! 🏥", "Not feeling good...", "My tummy hurts 🤒"];
+                msg = msgs[Math.floor(Math.random() * msgs.length)];
+            } else if (hunger < 40) {
+                const msgs = ["So hungry! 🍔", "Feed me please!", "Tummy grumbles...", "Starving!", "Pizza time? 🍕"];
+                msg = msgs[Math.floor(Math.random() * msgs.length)];
+            } else if (energy < 40) {
+                const msgs = ["So sleepy... 😴", "Nap time?", "Too tired...", "Yawn...", "Zzz..."];
+                msg = msgs[Math.floor(Math.random() * msgs.length)];
+            } else if (happiness < 40) {
+                const msgs = ["So bored... 😐", "Play with me!", "Lonely...", "Let's do something!", "Sad puppy... 😢"];
+                msg = msgs[Math.floor(Math.random() * msgs.length)];
+            } else {
+                const msgs = ["I love you! ❤️", "Best day ever!", "So happy! ✨", "You're the best!", "Yippee!", "Let's play! 🎾"];
+                msg = msgs[Math.floor(Math.random() * msgs.length)];
+            }
+            document.getElementById('speech-bubble').innerText = msg;
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
+        }
+
+        function logTransaction(name, amount) {
+            transactionLog.unshift({ name: name, amount: amount });
+            if (transactionLog.length > 50) transactionLog.pop();
+        }
+
+        function renderLog() {
+            const list = document.getElementById('transaction-list');
+            list.innerHTML = "";
+
+            if (transactionLog.length === 0) {
+                list.innerHTML = '<div style="text-align:center; color:#888; margin-top:10px;">No history yet...</div>';
+                return;
+            }
+
+            transactionLog.forEach(item => {
+                let row = document.createElement('div');
+                row.className = 'log-entry';
+                let nameDiv = document.createElement('div');
+                nameDiv.innerText = item.name;
+                let amtDiv = document.createElement('div');
+                if (item.amount > 0) {
+                    amtDiv.className = 'log-earn';
+                    amtDiv.innerText = `+$${item.amount.toFixed(2)}`;
+                } else {
+                    amtDiv.className = 'log-spend';
+                    amtDiv.innerText = `-$${Math.abs(item.amount).toFixed(2)}`;
+                }
+                row.appendChild(nameDiv);
+                row.appendChild(amtDiv);
+                list.appendChild(row);
+            });
+        }
+
+        function openHandbook() {
+            updateHandbook(chosenTypeName);
+            renderLog();
+            showOverlay('info-overlay');
+        }
+
+        function updateHandbook(type) {
+            const d = handbookData[type];
+            document.getElementById('info-cost').innerText = d.cost;
+            document.getElementById('info-food').innerText = d.food;
+            document.getElementById('info-groom').innerText = d.grooming;
+            document.getElementById('info-fact').innerText = d.fact;
+            document.querySelectorAll('.info-tab').forEach(t => t.classList.remove('active-tab'));
+            document.getElementById('tab-' + type).classList.add('active-tab');
+        }
+
+        //Vet functions, tapping hearts and holding shot
+        function openVet() {
+            if (balance < 50) { showToast("Need $50!"); return; }
+            heartTaps = 0; shotProgress = 0; shotDone = false;
+            document.getElementById('vet-heart-text').innerText = "Tap 5x (0/5)";
+            document.getElementById('shot-progress-fill').style.width = "0%";
+            document.getElementById('shot-progress-bg').style.display = 'none';
+            showOverlay('vet-overlay');
+        }
+
+        //Tap heart
+        function tapHeart() {
+            if (heartTaps < 5) {
+                heartTaps++;
+                document.getElementById('vet-heart-text').innerText = `Tap 5x (${heartTaps}/5)`;
+                checkVet();
+            }
+        }
+
+        //Hold shot
+        function startShot() {
+            if (shotDone) return;
+            document.getElementById('shot-progress-bg').style.display = 'block';
+            shotTimer = setInterval(() => {
+                shotProgress += 5;
+                document.getElementById('shot-progress-fill').style.width = shotProgress + "%";
+                if (shotProgress >= 100) { clearInterval(shotTimer); shotDone = true; checkVet(); }
+            }, 100);
+        }
+
+        //Stop shot, if user doesnt hold for 2 seconds
+        function stopShot() {
+            if (!shotDone) {
+                clearInterval(shotTimer);
+                shotProgress = 0;
+                document.getElementById('shot-progress-fill').style.width = "0%";
+            }
+        }
+
+        //Let user pay $50 and increase health by 40 if both tasks are complete
+        function checkVet() {
+            if (heartTaps >= 5 && shotDone) {
+                balance -= 50;
+                health = Math.min(100, health + 40);
+                logTransaction("Vet Bill", -50);
+                unlockBadge('vet');
+                incrementBadge('vet_pro', 5);
+                showToast("Healed! -$50");
+                closeOverlay('vet-overlay');
+                updateUI();
+            }
+        }
+
+        function startMathJob(op) {
+            mathOp = op;
+            mathCount = 0;
+            closeOverlay('math-config-overlay');
+            closeOverlay('job-menu');
+            showOverlay('math-overlay');
+            nextMath();
+        }
+
+        function nextMath() {
+            mathCount++;
+            if (mathCount > 3) {
+                balance += 25;
+                logTransaction("Math Job", 25);
+                showToast("Earned $25!");
+                incrementBadge('math', 5);
+                closeOverlay('math-overlay');
+                updateUI();
+                return;
+            }
+
+            let n1 = Math.floor(Math.random() * 10) + 1;
+            let n2 = Math.floor(Math.random() * 10) + 1;
+
+            if (mathOp === '+') mathAns = n1 + n2;
+            else if (mathOp === '-') mathAns = n1 - n2;
+            else if (mathOp === '*') mathAns = n1 * n2;
+            else { mathAns = n1; n1 = n1 * n2; }
+
+            document.getElementById('math-display').innerText = `${n1} ${mathOp} ${n2} = ?`;
+
+            const opts = [mathAns, mathAns + 1, mathAns - 1, mathAns + 2].sort(() => Math.random() - 0.5);
+            const container = document.getElementById('math-options');
+            container.innerHTML = '';
+            opts.forEach(o => {
+                let b = document.createElement('button');
+                b.className = 'math-choice-btn';
+                b.innerText = o;
+                b.onclick = () => o === mathAns ? nextMath() : showToast("Wrong!");
+                container.appendChild(b);
+            });
+        }
+
+        function startMemoryGame() {
+            memSeq = []; userSeq = [];
+            closeOverlay('job-menu');
+            showOverlay('memory-overlay');
+            addMem();
+        }
+
+        function addMem() {
+            isWatching = true;
+            userSeq = [];
+            memSeq.push(Math.floor(Math.random() * 4));
+            playMem();
+        }
+
+        async function playMem() {
+            document.getElementById('mem-status').innerText = "WATCH!";
+            for (let id of memSeq) {
+                let el = document.getElementById('mem-' + id);
+                el.classList.add('active-light');
+                await new Promise(r => setTimeout(r, 600));
+                el.classList.remove('active-light');
+                await new Promise(r => setTimeout(r, 200));
+            }
+            document.getElementById('mem-status').innerText = "REPEAT!";
+            isWatching = false;
+        }
+
+        function userMemoryClick(id) {
+            if (isWatching) return;
+
+            let el = document.getElementById('mem-' + id);
+            el.classList.add('active-light');
+            setTimeout(() => el.classList.remove('active-light'), 200);
+
+            userSeq.push(id);
+            if (userSeq[userSeq.length - 1] !== memSeq[userSeq.length - 1]) {
+                showToast("Failed!");
+                closeOverlay('memory-overlay');
+                return;
+            }
+
+            if (userSeq.length === 4) {
+                balance += 15;
+                logTransaction("Memory Job", 15);
+                showToast("Earned $15!");
+                incrementBadge('memory', 3);
+                closeOverlay('memory-overlay');
+                updateUI();
+            }
+            else if (userSeq.length === memSeq.length) {
+                setTimeout(addMem, 1000);
+            }
+        }
+
+        function unlockBadge(id) {
+            let b = badges.find(x => x.id === id);
+            if (b && !b.unlocked) {
+                b.unlocked = true;
+                showToast("Trophy: " + b.title);
+                renderBadges();
+            }
+        }
+
+        function incrementBadge(id, goal) {
+            let b = badges.find(x => x.id === id);
+            if (b && !b.unlocked) {
+                b.count++;
+                if (b.count >= goal) unlockBadge(id);
+            }
+        }
+
+        function renderBadges() {
+            const list = document.getElementById('badge-list');
+            list.innerHTML = '';
+            badges.forEach(b => {
+                let d = document.createElement('div');
+                d.className = 'badge-item' + (b.unlocked ? ' unlocked' : '');
+                d.innerText = b.unlocked ? b.icon : '❓';
+                d.onclick = () => { document.getElementById('badge-info').innerHTML = `<strong>${b.title}</strong>: ${b.desc}`; };
+                list.appendChild(d);
+            });
+        }
+
+        function resetGame() { if (confirm("Reset everything?")) location.reload(); }
+    </script>
+</body>
+
+</html>
